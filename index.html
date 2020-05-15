@@ -9,29 +9,25 @@
 </head>
 <body>
 
+<script src="./engine/Container.js"></script>
 <script src="./engine/Loader.js"></script>
 <script src="./engine/Renderer.js"></script>
+<script src="./engine/Sprite.js"></script>
 
 <script>
-    const { Loader, Renderer } = window.GameEngine;
+    const { Loader, Renderer, Sprite, Container } = window.GameEngine;
+    let sprite = null;
     const loader = new Loader();
     const renderer = new Renderer({
         width: 500,
         height: 500,
         background: 'grey',
         update: (timestamp) => {
-            renderer.draw((canvas, context) => {
-                context.fillStyle = 'red';
-                context.beginPath();
-                context.arc(
-                    canvas.width / 2 + 100 * Math.cos(timestamp / 500),
-                    canvas.height / 2 + 100 * Math.sin(timestamp / 700),
-                    10,
-                    0,
-                    Math.PI * 2
-                );
-                context.fill();
-            })
+            if (!sprite) {
+                return;
+            }
+            // sprite.x = renderer.canvas.width / 2 + 100 * Math.cos(timestamp / 500);
+            // sprite.y = renderer.canvas.height / 2 + 100 * Math.sin(timestamp / 500);
         }
     });
     document.body.append(renderer.canvas);
@@ -39,8 +35,21 @@
     loader.addImage('panda1', './static/kung-fu-panda.png');
     loader.addJson('persons', './static/persons.json');
     loader.load(function () {
-        document.body.append(loader.getImage('panda'));
-        console.log(loader.getJson('persons'));
+        sprite = new Sprite(loader.getImage('panda'), {
+            x: 0,
+            y: 0,
+            width: null,
+            height: null,
+            frame: {
+                x: 0,
+                y: 0,
+                width: null,
+                height: null,
+            }
+        });
+        sprite.scaleX = 0.5;
+        sprite.scaleY = 0.5;
+        renderer.stage.add(sprite);
     });
 </script>
 

@@ -8,26 +8,27 @@
             this.canvas.height = args.height || 50;
             this.update = args.update || (() => {});
             this.background = args.background || 'black';
+            this.stage = new GameEngine.Container();
             requestAnimationFrame((timestamp) => this.tick(timestamp));
         }
 
         tick(timestamp) {
-            this.clear();
             this.update(timestamp);
+            this.clear();
+            this.render();
             requestAnimationFrame((timestamp) => this.tick(timestamp));
         }
 
-        draw(callback) {
-            callback(this.canvas, this.context);
+        render() {
+            this.stage.draw(this.canvas, this.context);
         }
 
         clear() {
-            this.draw((canvas, context) => {
-                context.fillStyle = this.background;
-                context.beginPath();
-                context.rect(0, 0, canvas.width, canvas.height);
-                context.fill();
-            })
+            const { canvas, context } = this;
+            context.fillStyle = this.background;
+            context.beginPath();
+            context.rect(0, 0, canvas.width, canvas.height);
+            context.fill();
         }
     }
     window.GameEngine = window.GameEngine || {};
