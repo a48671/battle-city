@@ -1,0 +1,48 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Battle city</title>
+</head>
+<body>
+
+<script src="./engine/Loader.js"></script>
+<script src="./engine/Renderer.js"></script>
+
+<script>
+    const { Loader, Renderer } = window.GameEngine;
+    const loader = new Loader();
+    const renderer = new Renderer({
+        width: 500,
+        height: 500,
+        background: 'grey',
+        update: (timestamp) => {
+            renderer.draw((canvas, context) => {
+                context.fillStyle = 'red';
+                context.beginPath();
+                context.arc(
+                    canvas.width / 2 + 100 * Math.cos(timestamp / 500),
+                    canvas.height / 2 + 100 * Math.sin(timestamp / 700),
+                    10,
+                    0,
+                    Math.PI * 2
+                );
+                context.fill();
+            })
+        }
+    });
+    document.body.append(renderer.canvas);
+    loader.addImage('panda', './static/panda.jpg');
+    loader.addImage('panda1', './static/kung-fu-panda.png');
+    loader.addJson('persons', './static/persons.json');
+    loader.load(function () {
+        document.body.append(loader.getImage('panda'));
+        console.log(loader.getJson('persons'));
+    });
+</script>
+
+</body>
+</html>
