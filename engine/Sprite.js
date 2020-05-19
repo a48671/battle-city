@@ -2,7 +2,7 @@
     'use strict'
     class Sprite {
         constructor(texture, args = {}) {
-            const { x, y, width, height, frame = {} } = args;
+            const { x, y, width, height, frame = {}, anchorX, anchorY, scale } = args;
             this.texture = texture;
             this.frame = {
                 x: frame.x || 0,
@@ -10,10 +10,33 @@
                 width: frame.width || this.texture.width,
                 height: frame.height || this.texture.height
             };
+            this.anchorX = anchorX || 0;
+            this.anchorY = anchorY || 0;
             this.x = x || 0;
             this.y = y || 0;
-            this.width = width || frame.width;
-            this.height = height || frame.height;
+            this.width = width || this.frame.width;
+            this.height = height || this.frame.height;
+            if(scale !== undefined) {
+                this.setScale(scale);
+            }
+        }
+        setScale(value) {
+            this.scaleX = value;
+            this.scaleY = value;
+        }
+        get absoluteX() {
+            return this.x - this.anchorX * this.width;
+        }
+        set absoluteX(value) {
+            this.x = value + this.anchorX * this.width;
+            return value;
+        }
+        get absoluteY() {
+            return this.y - this.anchorY * this.height;
+        }
+        set absoluteY(value) {
+            this.y = value + this.anchorY * this.height;
+            return value;
         }
         get scaleX() {
             return this.width / this.frame.width;
@@ -36,8 +59,8 @@
                 this.frame.y,
                 this.frame.width,
                 this.frame.height,
-                this.x,
-                this.y,
+                this.absoluteX,
+                this.absoluteY,
                 this.width,
                 this.height
             );

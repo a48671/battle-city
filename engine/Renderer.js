@@ -11,7 +11,19 @@
             this.stage = new GameEngine.Container();
             requestAnimationFrame((timestamp) => this.tick(timestamp));
         }
-
+        get displayObjects() {
+            function _displayObjects(container, result = []) {
+                for (const displayObject of container.displayObjects) {
+                    if (displayObject instanceof GameEngine.Container) {
+                        _displayObjects(displayObject.displayObjects, result);
+                    } else {
+                        result.push(displayObject);
+                    }
+                }
+                return result;
+            }
+            return _displayObjects(this.stage);
+        }
         tick(timestamp) {
             this.update(timestamp);
             this.clear();

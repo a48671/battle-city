@@ -36,19 +36,12 @@
     loader.addJson('persons', './static/persons.json');
     loader.load(function () {
         sprite = new Sprite(loader.getImage('panda'), {
-            x: 0,
-            y: 0,
-            width: null,
-            height: null,
-            frame: {
-                x: 0,
-                y: 0,
-                width: null,
-                height: null,
-            }
+            anchorX: 0.5,
+            anchorY: 0.5,
+            scale: 0.5
         });
-        sprite.scaleX = 0.5;
-        sprite.scaleY = 0.5;
+        sprite.absoluteX = 0;
+        sprite.absoluteY = 0;
         renderer.stage.add(sprite);
     });
 </script>
